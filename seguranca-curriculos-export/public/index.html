@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currículo Seguro | Cadastro Seguro de Currículos</title>
+  
+  <!-- Modern Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Premium CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="logo-shield">🛡️</span>
+        <h1>Currículo <span>Seguro</span></h1>
+      </div>
+    </header>
+
+    <!-- Main Card -->
+    <main class="glass-card">
+      
+      <!-- TELA 1: LISTAGEM DE CURRÍCULOS -->
+      <section id="screen-list" class="app-screen">
+        <div class="screen-header">
+          <h2>Currículos Cadastrados</h2>
+          <button id="btn-go-to-create" class="btn btn-primary">
+            <span class="btn-icon">+</span> Novo Currículo
+          </button>
+        </div>
+
+        <div class="search-bar-container">
+          <input type="text" id="search-input" placeholder="Pesquisar por nome ou e-mail..." aria-label="Pesquisar currículos">
+        </div>
+
+        <div class="table-container">
+          <table class="curriculo-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th class="actions-col">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="curriculos-table-body">
+              <!-- Dynamically populated via JS -->
+              <tr class="loading-state">
+                <td colspan="3">Carregando currículos...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div id="empty-state" class="empty-state hidden">
+          <span class="empty-icon">📁</span>
+          <p>Nenhum currículo cadastrado até o momento.</p>
+          <p class="empty-sub">Seja o primeiro a cadastrar!</p>
+        </div>
+      </section>
+
+      <!-- TELA 2: CADASTRO DE NOVO CURRÍCULO -->
+      <section id="screen-create" class="app-screen hidden">
+        <div class="screen-header">
+          <h2>Novo Currículo</h2>
+          <button id="btn-back-from-create" class="btn btn-secondary">
+            ← Voltar para Lista
+          </button>
+        </div>
+
+        <form id="create-curriculo-form" novalidate>
+          <div class="form-grid">
+            
+            <!-- Nome (Required) -->
+            <div class="form-group">
+              <label for="input-nome">Nome Completo <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input type="text" id="input-nome" name="nome" placeholder="Ex: João Silva" required minlength="2" maxlength="100" autocomplete="name" pattern="^[a-zA-ZÀ-ÖØ-öø-ÿ\s'.~^-]{2,100}$" spellcheck="true" aria-required="true" aria-label="Nome Completo">
+              </div>
+              <span class="error-message" id="error-nome"></span>
+            </div>
+
+            <!-- E-mail (Required) -->
+            <div class="form-group">
+              <label for="input-email">Endereço de E-mail <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">📧</span>
+                <input type="email" id="input-email" name="email" placeholder="Ex: joao@provedor.com" required maxlength="100" autocomplete="email" inputmode="email" spellcheck="false" aria-required="true" aria-label="Endereço de E-mail">
+              </div>
+              <span class="error-message" id="error-email"></span>
+            </div>
+
+            <!-- Telefone (Optional) -->
+            <div class="form-group">
+              <label for="input-telefone">Telefone <span class="optional">(Opcional)</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">📞</span>
+                <input type="tel" id="input-telefone" name="telefone" placeholder="Ex: (11) 98765-4321" maxlength="20" autocomplete="tel" inputmode="tel" pattern="^(?:\(?[1-9]{2}\)?\s?)?(?:(?:9\d|[2-9])\d{3}\-?\d{4})$" spellcheck="false" aria-label="Telefone (Opcional)">
+              </div>
+              <span class="error-message" id="error-telefone"></span>
+            </div>
+
+            <!-- Endereço Web (Optional) -->
+            <div class="form-group">
+              <label for="input-web">Endereço WEB / Link <span class="optional">(Opcional)</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">🔗</span>
+                <input type="url" id="input-web" name="web_address" placeholder="Ex: https://github.com/joaosilva" maxlength="200" autocomplete="url" inputmode="url" pattern="^https?://.+" spellcheck="false" aria-label="Endereço Web (Opcional)">
+              </div>
+              <span class="error-message" id="error-web"></span>
+            </div>
+
+            <!-- Experiência Profissional (Required) -->
+            <div class="form-group full-width">
+              <label for="textarea-experiencia">Experiência Profissional <span class="required">*</span></label>
+              <div class="textarea-wrapper">
+                <textarea id="textarea-experiencia" name="experiencia" placeholder="Descreva brevemente sua trajetória profissional, cargos ocupados e principais projetos..." required minlength="5" maxlength="5000" rows="6" spellcheck="true" aria-required="true" aria-label="Experiência Profissional"></textarea>
+              </div>
+              <div class="char-counter"><span id="char-count">0</span> / 5000</div>
+              <span class="error-message" id="error-experiencia"></span>
+            </div>
+
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="form-actions">
+            <button type="button" id="btn-cancel-create" class="btn btn-secondary">Cancelar</button>
+            <button type="submit" id="btn-submit-curriculo" class="btn btn-success">
+              Salvar Currículo Seguro
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- TELA 3: CONSULTA / DETALHES -->
+      <section id="screen-details" class="app-screen hidden">
+        <div class="screen-header">
+          <h2>Detalhes do Candidato</h2>
+          <button id="btn-back-from-details" class="btn btn-secondary">
+            ← Voltar para Lista
+          </button>
+        </div>
+
+        <div class="details-card">
+          <!-- Profile Badge/Aesthetic Header -->
+          <div class="details-profile-header">
+            <div class="details-avatar">👤</div>
+            <div class="details-title-group">
+              <h3 id="detail-nome" class="detail-value">---</h3>
+              <p id="detail-email" class="detail-value">---</p>
+            </div>
+          </div>
+
+          <div class="details-grid">
+            <!-- Telefone -->
+            <div class="detail-item">
+              <span class="detail-label">📞 Telefone</span>
+              <div id="detail-telefone" class="detail-value">---</div>
+            </div>
+
+            <!-- Website -->
+            <div class="detail-item">
+              <span class="detail-label">🔗 Endereço WEB</span>
+              <div id="detail-web" class="detail-value">---</div>
+            </div>
+          </div>
+
+          <!-- Experiência Profissional -->
+          <div class="detail-section">
+            <h4>💼 Experiência Profissional</h4>
+            <div class="experience-box">
+              <p id="detail-experiencia" class="detail-value">---</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer with Academic / Security Info -->
+    <footer class="app-footer">
+      <p>Desenvolvido para fins acadêmicos. Foco em Defesa de Aplicações Web.</p>
+      <p class="copyright">&copy; 2026 Currículo Seguro. Licença Educacional.</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Box -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Application Frontend Logic -->
+  <script src="js/app.js"></script>
+</body>
+</html>
